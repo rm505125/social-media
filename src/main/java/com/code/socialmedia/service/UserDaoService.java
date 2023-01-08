@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import com.code.socialmedia.user.CustomUser;
 
+
 @Component
 public class UserDaoService {
 
@@ -43,13 +44,22 @@ public class UserDaoService {
 
 	}
 
-	public CustomUser updateUser(int userId, CustomUser user) {
 
+	public void deleteUser(int userId) {
+
+		Predicate<? super CustomUser> predicate = user -> user.getId().equals(userId);
+		users.removeIf(predicate);
+
+	}
+
+	public CustomUser updateUserById(int userId, CustomUser user) {
 		CustomUser foundUser = findOne(userId);
-		if (foundUser.equals(null)) {
+		if (foundUser == null) {
 			return null;
 		}
-		users.add(user);
+		users.removeIf(u -> u.getId().equals(userId));
+		user.setId(++idCount);
+		users.add(foundUser);
 		return user;
 	}
 
