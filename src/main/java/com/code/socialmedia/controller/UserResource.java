@@ -18,6 +18,8 @@ import com.code.socialmedia.controller.exception.UserNotFoundException;
 import com.code.socialmedia.service.UserDaoService;
 import com.code.socialmedia.user.CustomUser;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/social")
 public class UserResource {
@@ -30,10 +32,8 @@ public class UserResource {
 	}
 
 	@GetMapping("/users")
-	public ResponseEntity<List<CustomUser>> retrieveAllUsers() {
-
-		service.findAll();
-		return ResponseEntity.ok().build();
+	public List<CustomUser> retrieveAllUsers() {
+		return service.findAll();
 	}
 
 	@GetMapping("/users/{userId}")
@@ -42,12 +42,12 @@ public class UserResource {
 		if (user == null) {
 			throw new UserNotFoundException("id : " + userId);
 		}
-		
+
 		return user;
 	}
 
 	@PostMapping("/users")
-	public ResponseEntity<CustomUser> addNewUser(@RequestBody CustomUser user) {
+	public ResponseEntity<CustomUser> addNewUser(@Valid @RequestBody CustomUser user) {
 		CustomUser savedUser = service.saveNewUser(user);
 		// int userId = savedUser.getId();
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{userId}")
@@ -65,7 +65,7 @@ public class UserResource {
 	}
 
 	@PutMapping("/users/{userId}")
-	public ResponseEntity<CustomUser> updateUser(@PathVariable int userId, @RequestBody CustomUser user) {
+	public ResponseEntity<CustomUser> updateUser(@PathVariable int userId, @Valid @RequestBody CustomUser user) {
 		service.updateUserById(userId, user);
 		return ResponseEntity.accepted().build();
 	}

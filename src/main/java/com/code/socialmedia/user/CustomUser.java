@@ -2,6 +2,9 @@ package com.code.socialmedia.user;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
+
 public class CustomUser {
 	
 	public CustomUser(Integer id, String name, LocalDate birthdate) {
@@ -15,8 +18,13 @@ public class CustomUser {
 		// TODO Auto-generated constructor stub
 	}
 	private Integer id;
+	
+	@Size(min=2, message="name should be greater than length two")
 	private String name;
+	
+	@Past(message="Birth Date should be in the past")
 	private LocalDate birthdate;
+	
 	public Integer getId() {
 		return id;
 	}

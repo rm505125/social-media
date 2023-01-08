@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -33,5 +34,25 @@ public class CustomizedResponseEntityExceptionHandler extends ResponseEntityExce
 				request.getDescription(false));
 
 		return new ResponseEntity<ErrorDetails>(erroDetails, HttpStatus.BAD_REQUEST);
+	}
+	
+	@Override
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(
+			MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+
+//		ErrorDetails erroDetails = new ErrorDetails(LocalDateTime.now(), ex.getMessage(),
+//				request.getDescription(false));
+//		
+		
+//		ErrorDetails erroDetails = new ErrorDetails(LocalDateTime.now(), ex.getFieldError().getDefaultMessage(),
+//				request.getDescription(false));  // for getting default methods
+//		
+		ErrorDetails erroDetails = new ErrorDetails(LocalDateTime.now(),
+				"Total Errors:" + ex.getErrorCount()+  " First Errors:"+ ex.getMessage(),
+				request.getDescription(false));
+		
+		
+		return new ResponseEntity(erroDetails, HttpStatus.BAD_REQUEST);
+	
 	}
 }
