@@ -17,4 +17,17 @@ public class VersioningPersonController {
 	public PersonV2 getSecondVersonOfPerson() {
 		return new PersonV2(new Name("Bob","Charlie"));
 	}
+	
+	
+	//With Request Parameter
+	
+	@GetMapping(path="/person", params="version=1")
+	public PersonV1 getFirstVersonOfPersonRequestParameter() {
+		return new PersonV1("Bob Charlie");
+	}
+	
+	@GetMapping(path="/person", params="version=2")
+	public PersonV2 getSecondVersonOfPersonRequestParameter() {
+		return new PersonV2(new Name("Bob","Charlie"));
+	}
 }
