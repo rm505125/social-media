@@ -39,7 +39,21 @@ public class VersioningPersonController {
 	}
 	
 	@GetMapping(path="/person/header", headers="X-API-VERSION=2")
-	public PersonV2 getSecondVersonOfPersonRequestCustomHeader() {
+	public PersonV2 getSecondVersonOfPersonCustomHeader() {
 		return new PersonV2(new Name("Bob","Charlie"));
 	}
+	
+	//With Media type versioning 
+	
+		@GetMapping(path="/person/accept", produces="application/vnd.company.app-v1+json")
+		public PersonV1 getFirstVersonOfPersonMedia() {
+			return new PersonV1("Bob Charlie");
+		}
+		
+		@GetMapping(path="/person/accept", produces="application/vnd.company.app-v2+json")
+		public PersonV2 getSecondVersonOfPersonMedia() {
+			return new PersonV2(new Name("Bob","Charlie"));
+		}
+	
+	
 }
