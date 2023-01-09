@@ -1,8 +1,11 @@
 package com.code.socialmedia.controller;
 
 import java.net.URI;
+
 import java.util.List;
 
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +23,8 @@ import com.code.socialmedia.user.CustomUser;
 
 import jakarta.validation.Valid;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
+
 @RestController
 @RequestMapping("/social")
 public class UserResource {
@@ -36,14 +41,21 @@ public class UserResource {
 		return service.findAll();
 	}
 
+	// EntiryModel
+	// WebMvcLinkBuilder
+
 	@GetMapping("/users/{userId}")
-	public CustomUser retrievUserById(@PathVariable int userId) {
+	public EntityModel<CustomUser> retrievUserById(@PathVariable int userId) {
 		CustomUser user = service.findOne(userId);
 		if (user == null) {
 			throw new UserNotFoundException("id : " + userId);
 		}
 
-		return user;
+		EntityModel<CustomUser> entityModel = EntityModel.of(user);
+		WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).retrieveAllUsers());
+		entityModel.add(link.withRel("all-users"));
+
+		return entityModel;
 	}
 
 	@PostMapping("/users")
