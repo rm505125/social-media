@@ -1,10 +1,12 @@
 package com.code.socialmedia.filtering;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties("field1") //at class level
+//@JsonIgnoreProperties("field1") //at class level
 //@JsonIgnoreProperties({"field1","field2"})
+@JsonFilter("SomeBeanFilter")
 public class SomeBean {
 	
 	
